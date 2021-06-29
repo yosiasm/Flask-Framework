@@ -21,4 +21,4 @@ EXPOSE 5000
 ENV FLASK_APP="src/main.py" FLASK_DEBUG=1 
 
 
-CMD ["flask", "run", "-h", "0.0.0.0"]
+CMD ["flask", "run", "-h", "0.0.0.0","--cert", "adhoc"]
