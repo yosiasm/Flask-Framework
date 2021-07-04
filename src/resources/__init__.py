@@ -1,5 +1,5 @@
 # from ..event import socketio
 
-# from .notifikasi import api as notifikasi
+from .user import api as user
 
 # from . import notifikasi as notifikasiEvent

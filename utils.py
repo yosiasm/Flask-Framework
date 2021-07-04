@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from flask import Request
 from werkzeug.utils import secure_filename
 from config import Config
+import uuid
 
 
 # App Secret Key
@@ -96,3 +97,6 @@ def save_file(file, path:str, subfile:str="", prefix:str="", infix:str="", postf
     except Exception as e:
         print(e)
         return False, f"Gagal Menyimpan {file.filename}"
+
+def generate_uuid():
+    return str(uuid.uuid4())

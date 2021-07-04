@@ -1,13 +1,18 @@
 import os
+from cassandra.auth import PlainTextAuthProvider
 
-# Database setting
-POSTGRES_URL= os.environ.get('POSTGRES_URL', '10.10.10.101') #server
-POSTGRES_PORT = os.environ.get('POSTGRES_PORT', 5432) #server
-# POSTGRES_URL= os.environ.get('POSTGRES_URL', '') #local
-# POSTGRES_PORT = os.environ.get('POSTGRES_PORT', 5437) #local
-POSTGRES_USER = os.environ.get('POSTGRES_USER', '')
-POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD','')
-POSTGRES_DB = os.environ.get('POSTGRES_DB', '')
+# SQL Database setting
+MARIADB_URL= os.environ.get('MARIADB_URL', 'localhost') #local
+MARIADB_PORT = os.environ.get('MARIADB_PORT', 3306) #local
+MARIADB_USER = os.environ.get('MARIADB_USER', 'root')
+MARIADB_PASSWORD = os.environ.get('MARIADB_PASSWORD','12qwaszx')
+MARIADB_DB = os.environ.get('MARIADB_DB', 'test_db')
+
+# NoSQL Database setting
+CASSANDRA_HOST = ['127.0.0.1']
+CASSANDRA_KEYSPACE = 'test-db'
+CASSANDRA_USER = 'cassandra'
+CASSANDRA_PASSWORD = 'cassandra'
 
 def get_env_variable(name) -> str:
     try:
@@ -19,16 +24,25 @@ def get_env_variable(name) -> str:
 class Config(object):
     DEBUG = True
     # SQLAlchemy
-    uri_template = 'postgresql+psycopg2://{user}:{pw}@{url}:{port}/{db}'
+    uri_template = 'mysql+pymysql://{user}:{pw}@{url}:{port}/{db}'
     SQLALCHEMY_DATABASE_URI = uri_template.format(
-        user=POSTGRES_USER,
-        pw=POSTGRES_PASSWORD,
-        url=POSTGRES_URL,
-        port=POSTGRES_PORT,
-        db=POSTGRES_DB)
+        user=MARIADB_USER,
+        pw=MARIADB_PASSWORD,
+        url=MARIADB_URL,
+        port=MARIADB_PORT,
+        db=MARIADB_DB)
 
     # Silence the deprecation warning
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # CQLAlchemy
+    CASSANDRA_HOST=CASSANDRA_HOST
+    CASSANDRA_KEYSPACE=CASSANDRA_KEYSPACE
+    auth_provider = PlainTextAuthProvider(username=CASSANDRA_USER, password=CASSANDRA_PASSWORD)
+    CASSANDRA_SETUP_KWARGS = {
+        'auth_provider': auth_provider
+    }
+
 
     # API settings
     # API_PAGINATION_PER_PAGE = 10
